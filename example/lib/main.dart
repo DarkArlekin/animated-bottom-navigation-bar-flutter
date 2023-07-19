@@ -172,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         notchAndCornersAnimation: borderRadiusAnimation,
         splashSpeedInMilliseconds: 300,
         notchSmoothness: NotchSmoothness.defaultEdge,
-        gapLocation: GapLocation.center,
+        gapLocations: [GapLocation.center],
         leftCornerRadius: 32,
         rightCornerRadius: 32,
         onTap: (index) => setState(() => _bottomNavIndex = index),

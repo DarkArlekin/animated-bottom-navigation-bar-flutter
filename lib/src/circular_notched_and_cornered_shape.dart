@@ -12,7 +12,7 @@ class CircularNotchedAndCorneredRectangle extends NotchedShape {
   /// The same object can be used to create multiple shapes.
   final Animation<double>? animation;
   final NotchSmoothness notchSmoothness;
-  final GapLocation gapLocation;
+  final List<GapLocation> gapLocation;
   final double leftCornerRadius;
   final double rightCornerRadius;
 
@@ -68,14 +68,14 @@ class CircularNotchedAndCorneredRectangle extends NotchedShape {
     final halfOfHostWidth = host.width ~/ 2;
 
     if (guestCenterDx == halfOfHostWidth) {
-      if (gapLocation == GapLocation.end)
+      if (gapLocation.contains(GapLocation.end))
         throw GapLocationException(
             'Wrong gap location in $AnimatedBottomNavigationBar towards FloatingActionButtonLocation => '
             'consider use ${GapLocation.center} instead of $gapLocation or change FloatingActionButtonLocation');
     }
 
     if (guestCenterDx != halfOfHostWidth) {
-      if (gapLocation == GapLocation.center)
+      if (gapLocation.contains(GapLocation.center))
         throw GapLocationException(
             'Wrong gap location in $AnimatedBottomNavigationBar towards FloatingActionButtonLocation => '
             'consider use ${GapLocation.end} instead of $gapLocation or change FloatingActionButtonLocation');

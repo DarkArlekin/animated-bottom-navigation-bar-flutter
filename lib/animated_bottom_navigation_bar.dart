@@ -77,7 +77,7 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
   /// Location of the free space between tab bar items for notch.
   /// Must have the same location if [FloatingActionButtonLocation.centerDocked] or [FloatingActionButtonLocation.endDocked].
   /// Default is [GapLocation.end].
-  final GapLocation? gapLocation;
+  final List<GapLocation>? gapLocations;
 
   /// Free space width between tab bar items. The preferred width is equal to total width of [FloatingActionButton] and double [notchMargin].
   /// Default is 72.
@@ -137,7 +137,7 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     this.rightCornerRadius,
     this.iconSize,
     this.notchSmoothness,
-    this.gapLocation,
+    this.gapLocations,
     this.gapWidth,
     this.elevation,
     this.shadow,
@@ -154,17 +154,17 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
               ((itemCount ?? icons!.length) <= 5),
         ),
         super(key: key) {
-    if (gapLocation == GapLocation.end) {
+    if (gapLocations?.contains(GapLocation.end) ?? false) {
       if (rightCornerRadius != 0)
         throw NonAppropriatePathException(
             'RightCornerRadius along with ${GapLocation.end} or/and ${FloatingActionButtonLocation.endDocked} causes render issue => '
             'consider set rightCornerRadius to 0.');
     }
-    if (gapLocation == GapLocation.center) {
+    if (gapLocations?.contains(GapLocation.center) ?? false) {
       final iconsCountIsOdd = (itemCount ?? icons!.length).isOdd;
       if (iconsCountIsOdd)
         throw NonAppropriatePathException(
-            'Odd count of icons along with $gapLocation causes render issue => '
+            'Odd count of icons along with ${GapLocation.center} causes render issue => '
             'consider set gapLocation to ${GapLocation.end}');
     }
   }
@@ -187,7 +187,7 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     double? rightCornerRadius,
     double? iconSize,
     NotchSmoothness? notchSmoothness,
-    GapLocation? gapLocation,
+    List<GapLocation>? gapLocations,
     double? gapWidth,
     double? elevation,
     Shadow? shadow,
@@ -216,7 +216,7 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
           rightCornerRadius: rightCornerRadius ?? 0,
           iconSize: iconSize,
           notchSmoothness: notchSmoothness,
-          gapLocation: gapLocation ?? GapLocation.end,
+          gapLocations: gapLocations ?? [],
           gapWidth: gapWidth,
           elevation: elevation,
           shadow: shadow,
@@ -245,7 +245,7 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     double? leftCornerRadius,
     double? rightCornerRadius,
     NotchSmoothness? notchSmoothness,
-    GapLocation? gapLocation,
+    List<GapLocation>? gapLocations,
     double? gapWidth,
     double? elevation,
     Shadow? shadow,
@@ -272,7 +272,7 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
           leftCornerRadius: leftCornerRadius ?? 0,
           rightCornerRadius: rightCornerRadius ?? 0,
           notchSmoothness: notchSmoothness,
-          gapLocation: gapLocation ?? GapLocation.end,
+          gapLocations: gapLocations ?? [],
           gapWidth: gapWidth,
           elevation: elevation,
           shadow: shadow,
@@ -354,7 +354,7 @@ class _AnimatedBottomNavigationBarState
       shape: CircularNotchedAndCorneredRectangle(
         animation: widget.notchAndCornersAnimation,
         notchSmoothness: widget.notchSmoothness ?? NotchSmoothness.defaultEdge,
-        gapLocation: widget.gapLocation ?? GapLocation.end,
+        gapLocation: widget.gapLocations ?? [],
         leftCornerRadius: widget.leftCornerRadius ?? 0.0,
         rightCornerRadius: widget.rightCornerRadius ?? 0.0,
       ),
@@ -429,7 +429,8 @@ class _AnimatedBottomNavigationBarState
     for (var i = 0; i < itemCount; i++) {
       final isActive = i == widget.activeIndex;
 
-      if (widget.gapLocation == GapLocation.center && i == itemCount / 2) {
+      final haveCenterGap = widget.gapLocations?.contains(GapLocation.center) ?? false;
+      if (haveCenterGap && i == itemCount / 2) {
         items.add(GapItem(width: gapItemWidth));
       }
 
@@ -449,7 +450,8 @@ class _AnimatedBottomNavigationBarState
         ),
       );
 
-      if (widget.gapLocation == GapLocation.end && i == itemCount - 1) {
+      final haveEndGap = widget.gapLocations?.contains(GapLocation.end) ?? false;
+      if (haveEndGap && i == itemCount - 1) {
         items.add(GapItem(width: gapItemWidth));
       }
     }
@@ -465,4 +467,4 @@ enum NotchSmoothness {
   verySmoothEdge
 }
 
-enum GapLocation { none, center, end }
+enum GapLocation { none, center, end, start }
